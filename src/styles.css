@@ -91,6 +91,7 @@ body::after {
     animation-duration: 55500s, 30s;
     animation-timing-function: linear, ease;
     animation-iteration-count: infinite, infinite;
+    animation-direction: alternate;
 }
 
 h1 {
