@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="/src/styles.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap"
+            rel="stylesheet"
+        />
+        <title>Clockwatcher</title>
+        <script type="module" src="/src/main.ts" defer></script>
+    </head>
+
+    <body>
+        <div data-tauri-drag-region>
+            <div data-tauri-drag-region class="titlebar">
+                <div
+                    class="titlebar-button titlebar-image"
+                    id="titlebar-minimize"
+                >
+                    <img
+                        src="https://api.iconify.design/mdi:window-minimize.svg"
+                    />
+                </div>
+                <div class="titlebar-button titlebar-image" id="titlebar-close">
+                    <img src="https://api.iconify.design/mdi:close.svg" />
+                </div>
+            </div>
+
+            <div class="">
+                <h1 id="timer">00:00</h1>
+            </div>
+        </div>
+    </body>
+</html>
