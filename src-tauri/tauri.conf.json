@@ -1,7 +1,7 @@
 {
-  "productName": "spotifyrust",
+  "productName": "clockwatcher",
   "version": "0.1.0",
-  "identifier": "com.spotifyrust.app",
+  "identifier": "com.clockwatcher.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "spotifyrust",
+        "title": "Clockwatcher",
         "width": 350,
         "height": 150,
         "decorations": false,
