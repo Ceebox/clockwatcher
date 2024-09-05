@@ -1,7 +1,8 @@
 import { Window } from "@tauri-apps/api/window";
+import { invoke } from "@tauri-apps/api/core";
 
 let timer: HTMLInputElement | null;
-let mEndTime: number | null = Date.now() + 62 * 60 * 1000;
+let mEndTime: number | null;
 
 document
   ?.getElementById("titlebar-minimize")
@@ -10,10 +11,37 @@ document
   ?.getElementById("titlebar-close")
   ?.addEventListener("click", () => Window.getCurrent().close());
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   timer = document.querySelector("#timer");
 
-  setInterval(updateTimer, 1000);
+  await invoke("run_startup").then((response: any) => {
+    // If our response is a number, then we have the value from the server
+    const outputNum = parseInt(response);
+
+    // Fade in our new value
+    if (timer !== null) {
+      timer.setAttribute("class", "text-fade");
+
+      setTimeout(() => {
+        timer!.setAttribute("class", "text-show");
+      }, 1000);
+    }
+
+    // Check if we got a number correctly
+    if (isNaN(outputNum)) {
+      // We have an error code instead
+      if (timer !== null) {
+        timer.innerHTML = response;
+      }
+
+      // Short circuit
+      return;
+    }
+
+    mEndTime = outputNum;
+
+    setInterval(updateTimer, 1000);
+  });
 });
 
 function getTimeRemaining(endTime: number): string {
