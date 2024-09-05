@@ -20,8 +20,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // Fade in our new value
     if (timer !== null) {
-      timer.setAttribute("class", "text-fade");
-
       setTimeout(() => {
         timer!.setAttribute("class", "text-show");
       }, 1000);
