@@ -4,13 +4,22 @@ mod tray;
 
 #[tauri::command]
 fn run_startup() -> String {
-    use chrono;
-
     if !clockwatcher::settings_file_exists() {
         clockwatcher::write_settings_file();
     }
 
-    let time = chrono::Local::now().timestamp_millis() + (30600000);
+    if clockwatcher::should_write_time() {
+        clockwatcher::write_current_time();
+    }
+
+    let mut time : i64 = 0;
+    if let Some(file_time) = clockwatcher::read_time_from_file() {
+        time = file_time.timestamp_millis() + (30600000);
+    }
+
+    if time == 0 {
+        return "Invalid".to_string();
+    }
 
     return time.to_string();
 }
