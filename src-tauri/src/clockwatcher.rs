@@ -1,7 +1,13 @@
+use chrono::{DateTime, Duration, Local};
 use std::fs;
+use tauri::Emitter;
 
-const TIME_FILE_PATH : &str = "./time.clockwatcher";
-const SETTINGS_FILE_PATH : &str = "./settings.clockwatcher";
+const TIME_FILE_PATH: &str = "./time.clockwatcher";
+const SETTINGS_FILE_PATH: &str = "./settings.clockwatcher";
+
+// struct Settings {
+//     timer_length: DateTime<Local>,
+// }
 
 pub fn should_write_time() -> bool {
     if !fs::metadata(TIME_FILE_PATH).is_ok() {
@@ -10,9 +16,16 @@ pub fn should_write_time() -> bool {
     }
 
     // We have a file
-    if read_time_from_file() == None {
+    let time = read_time_from_file();
+    if time == None {
+        // No time - reset
         return true;
     }
+    // else if let Some(file_time) = time {
+    //     // We don't really want to reset instantly
+    //     // Work out if we've gone past the original time by a certain margin
+    //     // return (Local::now() - file_time) > Duration::hours(1);
+    // }
 
     return false;
 }
@@ -52,4 +65,8 @@ pub fn settings_file_exists() -> bool {
 pub fn write_settings_file() {
     fs::write(SETTINGS_FILE_PATH, "Milliseconds: ")
         .expect(format!("Unable to write file: {0}", SETTINGS_FILE_PATH).as_str());
+}
+
+pub fn change_page<R: tauri::Runtime>(app: &tauri::AppHandle<R>, page: &str) {
+    let _ = app.emit("change-page", page.to_owned() + ".html");
 }

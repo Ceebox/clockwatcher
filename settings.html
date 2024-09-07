@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/src/global.css" />
-        <link rel="stylesheet" href="/src/timer.css" />
+        <link rel="stylesheet" href="/src/settings.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,12 +13,14 @@
         />
         <title>Clockwatcher</title>
         <script type="module" src="/src/main.ts" defer></script>
-        <script type="module" src="/src/timer.ts" defer></script>
     </head>
 
     <body>
         <div data-tauri-drag-region>
             <div data-tauri-drag-region class="titlebar">
+                <div class="titlebar-button titlebar-image" id="titlebar-back">
+                    <img src="https://api.iconify.design/mdi:arrow-back.svg" />
+                </div>
                 <div
                     class="titlebar-button titlebar-image"
                     id="titlebar-minimize"
@@ -28,10 +30,6 @@
                 <div class="titlebar-button titlebar-image" id="titlebar-close">
                     <img src="https://api.iconify.design/mdi:close.svg" />
                 </div>
-            </div>
-
-            <div>
-                <h1 id="timer" class="text-fade"></h1>
             </div>
         </div>
     </body>

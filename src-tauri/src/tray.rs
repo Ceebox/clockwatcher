@@ -1,3 +1,5 @@
+use crate::clockwatcher;
+
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
@@ -5,9 +7,10 @@ use tauri::{
 };
 
 pub fn create_tray<R: Runtime>(app: &tauri::AppHandle<R>) -> tauri::Result<()> {
-    let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+    let clock_i = MenuItem::with_id(app, "clock", "Clock", true, None::<&str>)?;
     let settings_i = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&quit_i, &settings_i])?;
+    let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+    let menu = Menu::with_items(app, &[&clock_i, &settings_i, &quit_i])?;
 
     let _ = TrayIconBuilder::with_id("tray")
         .icon(app.default_window_icon().unwrap().clone())
@@ -18,7 +21,10 @@ pub fn create_tray<R: Runtime>(app: &tauri::AppHandle<R>) -> tauri::Result<()> {
                 app.exit(0);
             }
             "settings" => {
-                app.exit(0);
+                clockwatcher::change_page(app, "settings");
+            }
+            "clock" => {
+                clockwatcher::change_page(app, "clock");
             }
             _ => {}
         })
