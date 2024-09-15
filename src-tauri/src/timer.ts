@@ -38,12 +38,12 @@ function getTimeRemaining(endTime: number): string {
   let minutes = Math.max(Math.floor((t / 1000 / 60) % 60), 0);
   let hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
   return (
-    hours.toLocaleString(navigator.language, {
+    hours.toLocaleString("en-gb", {
       minimumIntegerDigits: 2,
       useGrouping: false,
     }) +
     ":" +
-    minutes.toLocaleString(navigator.language, {
+    minutes.toLocaleString("en-gb", {
       minimumIntegerDigits: 2,
       useGrouping: false,
     })

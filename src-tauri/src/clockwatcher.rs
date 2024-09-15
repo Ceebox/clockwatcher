@@ -5,11 +5,7 @@ use tauri::Emitter;
 const TIME_FILE_PATH: &str = "./time.clockwatcher";
 const SETTINGS_FILE_PATH: &str = "./settings.clockwatcher";
 
-// struct Settings {
-//     timer_length: DateTime<Local>,
-// }
-
-pub fn should_write_time() -> bool {
+pub fn should_write_time(milliseconds: i64) -> bool {
     if !fs::metadata(TIME_FILE_PATH).is_ok() {
         // We have no file at all, of course we can write
         return true;
@@ -21,11 +17,11 @@ pub fn should_write_time() -> bool {
         // No time - reset
         return true;
     }
-    // else if let Some(file_time) = time {
-    //     // We don't really want to reset instantly
-    //     // Work out if we've gone past the original time by a certain margin
-    //     // return (Local::now() - file_time) > Duration::hours(1);
-    // }
+    else if let Some(file_time) = time {
+        // We don't really want to reset instantly
+        // Work out if we've gone past the original time by a certain margin
+        return (Local::now() - file_time) > Duration::milliseconds(milliseconds) + Duration::hours(1);
+    }
 
     return false;
 }
@@ -39,6 +35,19 @@ pub fn read_time_from_file() -> Option<chrono::DateTime<chrono::Local>> {
         .and_local_timezone(chrono::Local)
         .earliest()
         .unwrap();
+
+    if contents.len() > 0 {
+        return Some(time);
+    }
+
+    return None;
+}
+
+pub fn read_duration_from_file() -> Option<chrono::Duration> {
+    let contents = read_settings_file();
+
+    let milliseconds: i64 = contents.parse().unwrap();
+    let time = chrono::Duration::milliseconds(milliseconds);
 
     if contents.len() > 0 {
         return Some(time);
@@ -62,9 +71,18 @@ pub fn settings_file_exists() -> bool {
     return fs::metadata(SETTINGS_FILE_PATH).is_ok();
 }
 
-pub fn write_settings_file() {
-    fs::write(SETTINGS_FILE_PATH, "Milliseconds: ")
+pub fn write_settings_file(duration: i32) {
+    fs::write(SETTINGS_FILE_PATH, "Milliseconds: ".to_owned() + &duration.to_string())
         .expect(format!("Unable to write file: {0}", SETTINGS_FILE_PATH).as_str());
+}
+
+pub fn read_settings_file() -> String {
+    let mut contents = fs::read_to_string(SETTINGS_FILE_PATH)
+        .expect(format!("Unable to read file {0}", SETTINGS_FILE_PATH).as_str());
+
+    contents = contents.replace("Milliseconds: ", "");
+
+    return contents;
 }
 
 pub fn change_page<R: tauri::Runtime>(app: &tauri::AppHandle<R>, page: &str) {

@@ -5,16 +5,21 @@ mod tray;
 #[tauri::command]
 fn run_timer_startup() -> String {
     if !clockwatcher::settings_file_exists() {
-        clockwatcher::write_settings_file();
+        clockwatcher::write_settings_file(0);
     }
 
-    if clockwatcher::should_write_time() {
+    let mut duration : i64 = 0;
+    if let Some(duration_time) = clockwatcher::read_duration_from_file() {
+        duration = duration_time.num_milliseconds();
+    }
+
+    if clockwatcher::should_write_time(duration) {
         clockwatcher::write_current_time();
     }
 
     let mut time : i64 = 0;
     if let Some(file_time) = clockwatcher::read_time_from_file() {
-        time = file_time.timestamp_millis() + (30600000);
+        time = file_time.timestamp_millis() + duration;
     }
 
     if time == 0 {
@@ -24,11 +29,21 @@ fn run_timer_startup() -> String {
     return time.to_string();
 }
 
+#[tauri::command]
+fn get_duration() -> String {
+    return clockwatcher::read_settings_file();
+}
+
+#[tauri::command]
+fn write_duration(time: i32) {
+    clockwatcher::write_settings_file(time);
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![run_timer_startup])
+        .invoke_handler(tauri::generate_handler![run_timer_startup, get_duration, write_duration])
         .setup(|app| {
             #[cfg(all(desktop))]
             {
