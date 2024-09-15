@@ -16,21 +16,19 @@
     </head>
 
     <body>
-        <div data-tauri-drag-region>
-            <div data-tauri-drag-region class="titlebar">
-                <div class="titlebar-button titlebar-image" id="titlebar-back">
-                    <img src="https://api.iconify.design/mdi:arrow-back.svg" />
-                </div>
-                <div
-                    class="titlebar-button titlebar-image"
-                    id="titlebar-minimize"
-                >
-                    <img src="https://api.iconify.design/mdi:minimize.svg" />
-                </div>
-                <div class="titlebar-button titlebar-image" id="titlebar-close">
-                    <img src="https://api.iconify.design/mdi:close.svg" />
-                </div>
+        <div data-tauri-drag-region class="titlebar">
+            <div class="titlebar-button titlebar-image" id="titlebar-back">
+                <img src="https://api.iconify.design/mdi:arrow-back.svg" />
+            </div>
+            <div class="titlebar-button titlebar-image" id="titlebar-minimize">
+                <img src="https://api.iconify.design/mdi:minimize.svg" />
+            </div>
+            <div class="titlebar-button titlebar-image" id="titlebar-close">
+                <img src="https://api.iconify.design/mdi:close.svg" />
             </div>
         </div>
+
+        <h3>Duration</h3>
+        <input type="time" id="duration" min="00:00" max="24:00" required />
     </body>
 </html>
