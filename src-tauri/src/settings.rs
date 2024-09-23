@@ -63,9 +63,11 @@ pub fn read_setting(property: &str) -> Option<String> {
         })
         .collect::<HashMap<_, _>>();
 
+    // If we have the property, return a copy of that
     if properties.contains_key(property) {
         return properties.get(property).cloned();
     }
 
+    // We haven't found anything
     return None;
 }

@@ -28,19 +28,23 @@ pub fn should_write_time(milliseconds: i64) -> bool {
 }
 
 pub fn read_time_from_file() -> Option<chrono::DateTime<chrono::Local>> {
+    // Read in our start time
     let contents = fs::read_to_string(TIME_FILE_PATH)
         .expect(format!("Unable to read file {0}", TIME_FILE_PATH).as_str());
 
+    // Parse to NaiveDateTime
     let time = chrono::NaiveDateTime::parse_from_str(contents.as_str(), "%Y-%m-%d %H:%M:%S")
         .expect("Failed to parse DateTime.")
         .and_local_timezone(chrono::Local)
         .earliest()
         .unwrap();
 
+    // If we have data, return the time
     if contents.len() > 0 {
         return Some(time);
     }
 
+    // We don't have anything
     return None;
 }
 
