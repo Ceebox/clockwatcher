@@ -45,7 +45,7 @@ pub fn read_time_from_file() -> Option<chrono::DateTime<chrono::Local>> {
 }
 
 pub fn read_duration_from_file() -> Option<chrono::Duration> {
-    let contents = settings::read_settings_file();
+    let contents = settings::read_setting("Milliseconds").unwrap();
 
     let milliseconds: i64 = contents.parse().unwrap();
     let time = chrono::Duration::milliseconds(milliseconds);

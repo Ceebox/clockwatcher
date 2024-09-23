@@ -6,7 +6,7 @@ mod tray;
 #[tauri::command]
 fn run_timer_startup() -> String {
     if !settings::settings_file_exists() {
-        settings::write_settings_file(0);
+        settings::write_setting("Milliseconds", "0");
     }
 
     let mut duration: i64 = 0;
@@ -32,12 +32,12 @@ fn run_timer_startup() -> String {
 
 #[tauri::command]
 fn get_duration() -> String {
-    return settings::read_settings_file();
+    return settings::read_setting("Milliseconds").unwrap();
 }
 
 #[tauri::command]
 fn write_duration(time: i32) {
-    settings::write_settings_file(time);
+    settings::write_setting("Milliseconds", time.to_string().as_str());
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
