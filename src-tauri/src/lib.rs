@@ -1,14 +1,15 @@
 mod clockwatcher;
+mod settings;
 #[cfg(desktop)]
 mod tray;
 
 #[tauri::command]
 fn run_timer_startup() -> String {
-    if !clockwatcher::settings_file_exists() {
-        clockwatcher::write_settings_file(0);
+    if !settings::settings_file_exists() {
+        settings::write_settings_file(0);
     }
 
-    let mut duration : i64 = 0;
+    let mut duration: i64 = 0;
     if let Some(duration_time) = clockwatcher::read_duration_from_file() {
         duration = duration_time.num_milliseconds();
     }
@@ -17,7 +18,7 @@ fn run_timer_startup() -> String {
         clockwatcher::write_current_time();
     }
 
-    let mut time : i64 = 0;
+    let mut time: i64 = 0;
     if let Some(file_time) = clockwatcher::read_time_from_file() {
         time = file_time.timestamp_millis() + duration;
     }
@@ -31,19 +32,23 @@ fn run_timer_startup() -> String {
 
 #[tauri::command]
 fn get_duration() -> String {
-    return clockwatcher::read_settings_file();
+    return settings::read_settings_file();
 }
 
 #[tauri::command]
 fn write_duration(time: i32) {
-    clockwatcher::write_settings_file(time);
+    settings::write_settings_file(time);
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![run_timer_startup, get_duration, write_duration])
+        .invoke_handler(tauri::generate_handler![
+            run_timer_startup,
+            get_duration,
+            write_duration
+        ])
         .setup(|app| {
             #[cfg(all(desktop))]
             {
@@ -52,7 +57,9 @@ pub fn run() {
             }
             Ok(())
         })
-        .on_window_event(|window: &tauri::Window, event: &tauri::WindowEvent| on_window_event(window.clone(), event.clone()))
+        .on_window_event(|window: &tauri::Window, event: &tauri::WindowEvent| {
+            on_window_event(window.clone(), event.clone())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
