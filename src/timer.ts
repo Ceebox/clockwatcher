@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 function getTimeRemaining(endTime: number): string {
   let t = Math.abs(endTime - Date.now());
-  let minutes = Math.max(Math.floor((t / 1000 / 60) % 60), 0);
+  let minutes = Math.max(Math.ceil((t / 1000 / 60) % 60), 0);
   let hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
   return (
     hours.toLocaleString(navigator.language, {
