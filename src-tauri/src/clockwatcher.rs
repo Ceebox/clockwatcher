@@ -1,4 +1,4 @@
-use chrono::{DateTime, Duration, Local};
+use chrono::{Duration, Local};
 use std::fs;
 use tauri::Emitter;
 
@@ -16,11 +16,11 @@ pub fn should_write_time(milliseconds: i64) -> bool {
     if time == None {
         // No time - reset
         return true;
-    }
-    else if let Some(file_time) = time {
+    } else if let Some(file_time) = time {
         // We don't really want to reset instantly
         // Work out if we've gone past the original time by a certain margin
-        return (Local::now() - file_time) > Duration::milliseconds(milliseconds) + Duration::hours(1);
+        return (Local::now() - file_time)
+            > Duration::milliseconds(milliseconds) + Duration::hours(1);
     }
 
     return false;
@@ -72,8 +72,11 @@ pub fn settings_file_exists() -> bool {
 }
 
 pub fn write_settings_file(duration: i32) {
-    fs::write(SETTINGS_FILE_PATH, "Milliseconds: ".to_owned() + &duration.to_string())
-        .expect(format!("Unable to write file: {0}", SETTINGS_FILE_PATH).as_str());
+    fs::write(
+        SETTINGS_FILE_PATH,
+        "Milliseconds: ".to_owned() + &duration.to_string(),
+    )
+    .expect(format!("Unable to write file: {0}", SETTINGS_FILE_PATH).as_str());
 }
 
 pub fn read_settings_file() -> String {
