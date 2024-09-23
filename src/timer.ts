@@ -35,8 +35,17 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 function getTimeRemaining(endTime: number): string {
   let t = Math.abs(endTime - Date.now());
+
+  // Use floor so the time doesn't end too soon
   let minutes = Math.max(Math.ceil((t / 1000 / 60) % 60), 0);
   let hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
+
+  // We don't want to display "00:60"
+  if (minutes == 60) {
+    hours++;
+    minutes = 0;
+  }
+
   return (
     hours.toLocaleString(navigator.language, {
       minimumIntegerDigits: 2,
