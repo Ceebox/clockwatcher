@@ -2,9 +2,18 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { Window } from "@tauri-apps/api/window";
 
+function changePage(event: String) {
+  for (const element of document.getElementsByClassName("text-show")) {
+    element.className = "text-fade";
+  }
+  setTimeout(function () {
+    window.location.href = `./${event}`;
+  }, 1000);
+}
+
 // Make sure we change the page when the user wants us to
 listen<string>("change-page", (event) => {
-  window.location.href = `./${event.payload}`;
+  changePage(event.payload);
 });
 
 // Add the theme CSS to the document
@@ -17,7 +26,7 @@ await invoke("get_theme").then((theme: any) => {
   head.appendChild(link);
 });
 
-// Add nav buttons to the page
+// Assign nav button function
 document
   ?.getElementById("titlebar-minimize")
   ?.addEventListener("click", () => Window.getCurrent().minimize());
@@ -26,4 +35,4 @@ document
   ?.addEventListener("click", () => Window.getCurrent().close());
 document
   ?.getElementById("titlebar-back")
-  ?.addEventListener("click", () => (window.location.href = "index.html"));
+  ?.addEventListener("click", () => changePage("index.html"));
