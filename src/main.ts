@@ -16,15 +16,17 @@ listen<string>("change-page", (event) => {
   changePage(event.payload);
 });
 
-// Add the theme CSS to the document
-await invoke("get_theme").then((result: any) => {
-  let theme = result as string;
-  let head = document.getElementsByTagName("head")[0];
-  let link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "/src/theme-" + theme.toLowerCase() + ".css";
-  link.media = "all";
-  head.appendChild(link);
+window.addEventListener("DOMContentLoaded", async () => {
+  // Add the theme CSS to the document
+  await invoke("get_theme").then((result: any) => {
+    let theme = result as string;
+    let head = document.getElementsByTagName("head")[0];
+    let link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/src/theme-" + theme.toLowerCase() + ".css";
+    link.media = "all";
+    head.appendChild(link);
+  });
 });
 
 // Assign nav button function
