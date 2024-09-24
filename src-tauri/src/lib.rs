@@ -7,6 +7,7 @@ mod tray;
 fn run_timer_startup() -> String {
     if !settings::settings_file_exists() {
         settings::write_setting("Milliseconds", "0");
+        settings::write_setting("Theme", "default");
     }
 
     let mut duration: i64 = 0;
@@ -36,6 +37,14 @@ fn get_duration() -> String {
 }
 
 #[tauri::command]
+fn get_theme() -> String {
+    match settings::read_setting("Theme") {
+        Some(theme) => theme,
+        None => "default".to_string(),
+    }
+}
+
+#[tauri::command]
 fn write_duration(time: i32) {
     settings::write_setting("Milliseconds", time.to_string().as_str());
 }
@@ -47,7 +56,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             run_timer_startup,
             get_duration,
-            write_duration
+            write_duration,
+            get_theme
         ])
         .setup(|app| {
             #[cfg(all(desktop))]

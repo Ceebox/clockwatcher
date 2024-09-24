@@ -1,0 +1,95 @@
+/* Properties */
+@property --lines {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0.000104px;
+}
+
+/* Animations */
+@keyframes gradient {
+    0% {
+        background-position-x: 0%;
+        background-position-y: 50%;
+    }
+
+    50% {
+        background-position-x: 100%;
+        background-position-y: 50%;
+    }
+
+    100% {
+        background-position-x: 0%;
+        background-position-y: 50%;
+    }
+}
+
+@keyframes lineChange {
+    50% {
+        --lines: 0.0001px;
+    }
+}
+
+/* Elements */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    /* Noisy gradient hack */
+    background: repeating-radial-gradient(
+        closest-side,
+        #000000ff,
+        var(--lines),
+        #000000ff,
+        0,
+        #fff,
+        calc(var(--lines) * 2),
+        #000 0
+    );
+
+    filter: blur(1.5vw);
+
+    animation: lineChange 55500s linear infinite;
+}
+
+body::after {
+    /* Fit the whole window */
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    /* Rainbow gradient */
+    background: linear-gradient(
+        -45deg,
+        #fc884e88,
+        #e73c7e88,
+        #b180d788,
+        #4ee2fc88,
+        #23f5ab88,
+        #ffd52b88
+    );
+
+    background-size: 400% 400%;
+
+    animation: gradient;
+    animation-duration: 30s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
