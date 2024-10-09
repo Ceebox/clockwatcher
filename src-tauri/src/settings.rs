@@ -35,7 +35,7 @@ pub fn write_setting(property: &str, value: &str) {
     // Cobble our properties into a string we can write to the file
     let mut write_values = "".to_string();
     for property in properties {
-        write_values.push_str(format!("{0}: {1}", property.0, property.1).as_str());
+        write_values.push_str(format!("{0}: {1}\n", property.0, property.1).as_str());
     }
 
     // Overwrite the file with our new data
